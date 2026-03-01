@@ -68,9 +68,12 @@ URL_SOFTA=your_site_url
 ## 🎯 Как это работает (для обучения)
 
 ### 1. Запрос номера телефона
-Бот использует встроенную функцию Telegram для запроса контакта:
 ```python
-contact_keyboard = KeyboardButton("📱 Отправить номер телефона", request_contact=True)
+@router.callback_query(F.data == 'autorization')
+async def telegram_auth(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer('Введите номер телефона: ')
+    await state.set_state(AuthState.waiting_for_phone)
+    await callback.answer()
 ```
 
 ### 2. Сохранение в MongoDB
